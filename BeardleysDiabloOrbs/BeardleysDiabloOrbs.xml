@@ -1,0 +1,2416 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Script file="BeardleysDiabloOrbs.lua" />
+	<Frame name="BD32GUI" parent="UIParent" toplevel="true" movable="true">
+		<Size>
+			<AbsDimension x="480" y="670" />
+		</Size>
+		<Anchors>
+			<Anchor point="TOP">
+				<Offset x="0" y="0" />
+			</Anchor>
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background-Dark" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="5" right="6" top="6" bottom="5" />
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32" />
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32" />
+			</EdgeSize>
+			<Color r="0" g="0" b="0" a="0.9" />
+		</Backdrop>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString name="fontStrHeadline" inherits="NumberFontNormalHuge" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-heavy.ttf" text="Beardley's Diablo Orbs" justifyV="TOP">
+					<Size>
+						<AbsDimension x="400" y="100" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset x="-5" y="-20" />
+						</Anchor>
+					</Anchors>
+					<FontHeight>
+						<AbsValue val="26" />
+					</FontHeight>
+					<Color r="0" g="1" b="0" />
+				</FontString>
+				<FontString name="fontStrConfiguration" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Orb Configuration" justifyV="TOP">
+					<Size>
+						<AbsDimension x="320" y="80" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset x="45" y="-60" />
+						</Anchor>
+					</Anchors>
+					<FontHeight>
+						<AbsValue val="20" />
+					</FontHeight>
+					<Color r="1" g="1" b="1" />
+				</FontString>
+				<FontString name="fontStrReloadReq" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="UI Reload required" justifyV="TOP">
+					<Size>
+						<AbsDimension x="150" y="35" />
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT">
+							<Offset x="45" y="92" />
+						</Anchor>
+					</Anchors>
+					<FontHeight>
+						<AbsValue val="9" />
+					</FontHeight>
+					<Color r="1" g="1" b="1" />
+				</FontString>
+				<FontString name="fontStrReloadReq1" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="UI Reload required" justifyV="TOP">
+					<Size>
+						<AbsDimension x="150" y="35" />
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT">
+							<Offset x="45" y="130" />
+						</Anchor>
+					</Anchors>
+					<FontHeight>
+						<AbsValue val="9" />
+					</FontHeight>
+					<Color r="1" g="1" b="1" />
+				</FontString>
+				<FontString name="VersionFontString" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Version" justifyV="BOTTOM">
+					<Size>
+						<AbsDimension x="100" y="50" />
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT">
+							<Offset x="15" y="10" />
+						</Anchor>
+					</Anchors>
+					<FontHeight>
+						<AbsValue val="10" />
+					</FontHeight>
+					<Color r="1" g="1" b="1" />
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+      <ScrollFrame name="BD32GUIScrollBar" inherits="FauxScrollFrameTemplate" hidden="false">
+	  <Size>
+		<AbsDimension x="432" y="585" />
+	  </Size>
+	  <Anchors>
+		<Anchor point="TOPLEFT" relativeTo="BD32GUI" relativePoint="BOTTOMLEFT">
+			<Offset x="12" y="618" />
+		</Anchor>
+	  </Anchors> 
+        <Scripts>
+          <OnVerticalScroll>
+            FauxScrollFrame_OnVerticalScroll(self, offset, 16, BD32GUIScrollBar_Update);
+          </OnVerticalScroll>
+          <OnShow>
+			self:SetVerticalScroll(0)
+			BD32GUIScrollBar_Update()
+			self:SetBackdrop({bgFile = "Interface\\addons\\BeardleysDiabloOrbs\\images\\menu_background.tga",edgeFile="Interface\\Tooltips\\UI-Tooltip-Border", tile = false, edgeSize = 14, insets = { left = 50, right = 50, top = 100, bottom = 100}})	
+			self:SetBackdropColor(0,0,0,0.7)
+			BD32GUIScrollBar_Update()
+          </OnShow>
+        </Scripts>
+      </ScrollFrame>
+			<Button name="HealthOrbButton" inherits="UIPanelButtonTemplate">
+				<Size>
+					<AbsDimension x="125" y="28" />
+				</Size>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="-65" y="235" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrHealthOrbButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Left Orb" justifyV="TOP">
+							<Anchors>
+								<Anchor point="CENTER">
+									<Offset x="0" y="-1" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="15" />
+							</FontHeight>
+							<Color r="1" g="1" b="0" />
+							
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						HealthOrbButton:RegisterForClicks("LeftButtonUp")
+						HealthOrbButton.defaultTextColor = {r=1, g=1, b=0, a=1}
+					</OnLoad>
+					<OnEnter>
+						local r,g,b,a = HealthOrbButton.text:GetTextColor()
+						HealthOrbButton.text:SetTextColor(1,1,1,a)
+					</OnEnter>
+					<OnLeave>
+						local r,g,b,a = HealthOrbButton.defaultTextColor.r,HealthOrbButton.defaultTextColor.g,HealthOrbButton.defaultTextColor.b,HealthOrbButton.defaultTextColor.a
+						HealthOrbButton.text:SetTextColor(r,g,b,a)
+					</OnLeave>
+					<OnClick>
+						if BD32ConfigFrame:IsVisible() then
+							if BD32ConfigFrame.text:GetText() == HealthOrbButton.text:GetText() then
+								BD32ConfigFrame:Hide()
+								HealthOrbOptionsDropDown:Hide()
+							else
+								CommitButton.orb = healthOrb
+								CommitButton.orbData = BD32CharacterData.healthOrb
+								CommitButton.textureElement = BD32CharacterData.healthOrb.textures
+								resetXMLTextBoxes()
+								checkXMLOrbFontPlacement()
+								UpdateXMLTextures(healthOrb)
+								UpdateXMLColors(BD32CharacterData.healthOrb.orbColor,BD32CharacterData.healthOrb.galaxy,BD32CharacterData.healthOrb.font1,BD32CharacterData.healthOrb.font2)
+								UpdateXMLText(healthOrb)
+								ManaOrbOptionsDropDown:Hide()
+								HealthOrbOptionsDropDown:Show()
+								BD32ConfigFrame.text:SetText(HealthOrbButton.text:GetText())
+								BD32ConfigFrame.text:SetTextColor(HealthOrbButton.defaultTextColor.r,HealthOrbButton.defaultTextColor.g,HealthOrbButton.defaultTextColor.b,HealthOrbButton.defaultTextColor.a)
+							end
+						else
+							CommitButton.orb = healthOrb
+							CommitButton.orbData = BD32CharacterData.healthOrb
+							CommitButton.textureElement = BD32CharacterData.healthOrb.textures
+							BD32ConfigFrame:Show()
+							resetXMLTextBoxes()
+							checkXMLOrbFontPlacement()
+							UpdateXMLTextures(healthOrb)
+							UpdateXMLColors(BD32CharacterData.healthOrb.orbColor,BD32CharacterData.healthOrb.galaxy,BD32CharacterData.healthOrb.font1,BD32CharacterData.healthOrb.font2)
+							UpdateXMLText(healthOrb)
+							HealthOrbOptionsDropDown:Show()
+							BD32ConfigFrame.text:SetText(HealthOrbButton.text:GetText())
+							BD32ConfigFrame.text:SetTextColor(HealthOrbButton.defaultTextColor.r,HealthOrbButton.defaultTextColor.g,HealthOrbButton.defaultTextColor.b,HealthOrbButton.defaultTextColor.a)
+						end
+						BD32OrbAbsorbCheckBox:Show()
+						ColorPickerFrame:Hide()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="ManaOrbButton" inherits="UIPanelButtonTemplate">
+				<Size>
+					<AbsDimension x="125" y="28" />
+				</Size>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="75" y="235" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrManaOrbButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Right Orb" justifyV="TOP">
+							<Anchors>
+								<Anchor point="CENTER">
+									<Offset x="0" y="-1" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="15" />
+							</FontHeight>
+							<Color r="1" g="1" b="0" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						ManaOrbButton:RegisterForClicks("LeftButtonUp")
+						ManaOrbButton.defaultTextColor = {r=1, g=1, b=0, a=1}
+					</OnLoad>
+					<OnEnter>
+						local r,g,b,a = ManaOrbButton.text:GetTextColor()
+						ManaOrbButton.text:SetTextColor(1,1,1,a)
+					</OnEnter>
+					<OnLeave>
+						local r,g,b,a = ManaOrbButton.defaultTextColor.r,ManaOrbButton.defaultTextColor.g,ManaOrbButton.defaultTextColor.b,ManaOrbButton.defaultTextColor.a
+						ManaOrbButton.text:SetTextColor(r,g,b,a)
+					</OnLeave>
+					<OnClick>
+						if BD32ConfigFrame:IsVisible() then
+							if BD32ConfigFrame.text:GetText() == ManaOrbButton.text:GetText() then
+								BD32ConfigFrame:Hide()
+								ManaOrbOptionsDropDown:Hide()
+							else
+								CommitButton.orb = manaOrb
+								CommitButton.orbData = BD32CharacterData.manaOrb
+								CommitButton.textureElement = BD32CharacterData.manaOrb.textures
+								resetXMLTextBoxes()
+								checkXMLOrbFontPlacement()
+								UpdateXMLTextures(manaOrb)
+								UpdateXMLColors(BD32CharacterData.manaOrb.orbColor,BD32CharacterData.manaOrb.galaxy,BD32CharacterData.manaOrb.font1,BD32CharacterData.manaOrb.font2)
+								UpdateXMLText(manaOrb)
+								BD32ConfigFrame.text:SetText(ManaOrbButton.text:GetText())
+								BD32ConfigFrame.text:SetTextColor(ManaOrbButton.defaultTextColor.r,ManaOrbButton.defaultTextColor.g,ManaOrbButton.defaultTextColor.b,ManaOrbButton.defaultTextColor.a)
+								HealthOrbOptionsDropDown:Hide()
+								ManaOrbOptionsDropDown:Show()
+							end
+						else
+							BD32ConfigFrame:Show()
+							CommitButton.orb = manaOrb
+							CommitButton.orbData = BD32CharacterData.manaOrb
+							CommitButton.textureElement = BD32CharacterData.manaOrb.textures
+							resetXMLTextBoxes()
+							checkXMLOrbFontPlacement()
+							UpdateXMLTextures(manaOrb)
+							UpdateXMLColors(BD32CharacterData.manaOrb.orbColor,BD32CharacterData.manaOrb.galaxy,BD32CharacterData.manaOrb.font1,BD32CharacterData.manaOrb.font2)
+							UpdateXMLText(manaOrb)
+							ManaOrbOptionsDropDown:Show()
+							BD32ConfigFrame.text:SetText(ManaOrbButton.text:GetText())
+							BD32ConfigFrame.text:SetTextColor(ManaOrbButton.defaultTextColor.r,ManaOrbButton.defaultTextColor.g,ManaOrbButton.defaultTextColor.b,ManaOrbButton.defaultTextColor.a)
+						end
+						BD32OrbAbsorbCheckBox:Hide()
+						ColorPickerFrame:Hide()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="CloseButton" inherits="UIPanelButtonTemplate">
+				<Size>
+					<AbsDimension x="95" y="23" />
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOM">
+						<Offset x="5" y="11" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrCloseButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Close" justifyV="TOP">
+							<Anchors>
+								<Anchor point="CENTER">
+									<Offset x="0" y="-1" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="14" />
+							</FontHeight>
+							<Color r="1" g="1" b="0" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						CloseButton:RegisterForClicks("LeftButtonUp")
+						CloseButton.defaultTextColor = {r=1, g=1, b=0, a=1}
+					</OnLoad>
+					<OnEnter>
+						local r,g,b,a = CloseButton.text:GetTextColor()
+						CloseButton.text:SetTextColor(1,1,1,a)
+					</OnEnter>
+					<OnLeave>
+						local r,g,b,a = CloseButton.defaultTextColor.r,CloseButton.defaultTextColor.g,CloseButton.defaultTextColor.b,CloseButton.defaultTextColor.a
+						CloseButton.text:SetTextColor(r,g,b,a)
+					</OnLeave>
+					<OnMouseUp>
+						ManaOrbOptionsDropDown:Hide()
+						HealthOrbOptionsDropDown:Hide()
+						ColorPickerFrame:Hide()
+						Handle_BD32GUI()
+					</OnMouseUp>
+				</Scripts>
+			</Button>
+			
+			<Button name="ResetBDWindows" inherits="UIPanelButtonTemplate">
+				<Size>
+					<AbsDimension x="95" y="23" />
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMLEFT">
+						<Offset x="12" y="11" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrResetBDWindows" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Reset        Frames" justifyV="TOP">
+							<Anchors>
+								<Anchor point="CENTER">
+									<Offset x="0" y="-9" />
+								</Anchor>
+							</Anchors>
+							<Size>
+								<AbsDimension x="100" y="35" />
+							</Size>
+							<FontHeight>
+								<AbsValue val="9" />
+							</FontHeight>
+							<Color r="1" g="1" b="0" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						self:RegisterForClicks("LeftButtonUp")
+						self.defaultTextColor = {r=1, g=1, b=0, a=1}
+						StaticPopupDialogs["RESET_BD_WINDOWS"] = {
+							text = RESET_BD_WINDOWS_TEXT,
+							button1 = BD_ADDON_YES,
+							button2 = BD_ADDON_NO,
+							OnAccept = function()
+							bar1Frame:ClearAllPoints()
+							bar1Frame:SetScale(BD32CharacterData.barFrame.scale)
+							bar1Frame:SetPoint("BOTTOM", UIParent, "BOTTOM",1,-4)
+							
+							bar2Frame:ClearAllPoints()
+							bar2Frame:SetScale(BD32CharacterData.barFrame.scale)
+							bar2Frame:SetPoint("BOTTOM", UIParent, "BOTTOM",1,-4)
+							
+							bar3Frame:ClearAllPoints()
+							bar3Frame:SetScale(BD32CharacterData.barFrame.scale)
+							bar3Frame:SetPoint("BOTTOM", UIParent, "BOTTOM",1,-4)
+											
+							healthOrb:ClearAllPoints()
+							healthOrb:SetScale(BD32CharacterData.healthOrb.scale)
+							healthOrb:SetPoint("BOTTOM", nil, "BOTTOM",-250,0)
+							
+							manaOrb:ClearAllPoints()
+							manaOrb:SetScale(BD32CharacterData.manaOrb.scale)
+							manaOrb:SetPoint("BOTTOM", nil, "BOTTOM",250,0)
+							
+							MultiBarRight:ClearAllPoints()
+							MultiBarRight:SetScale(BD32CharacterData.barFrame.scale*66)
+							MultiBarRight:SetPoint("RIGHT", nil, "RIGHT",0,0)
+							
+							local factionGroup, factionName = UnitFactionGroup("player")
+							pvpFlagFrame:ClearAllPoints()
+							if factionGroup == "Horde" then
+								pvpFlagFrame:SetPoint("CENTER", healthOrb,66,-68)
+							else
+								pvpFlagFrame:SetPoint("CENTER", healthOrb,68,-67)
+							end
+							
+							MultiBarLeft:ClearAllPoints()
+							MultiBarLeft:SetScale(BD32CharacterData.barFrame.scale*66)
+							MultiBarLeft:SetPoint("RIGHT", nil, "RIGHT",-40,0)						
+							MultiBarRight.ignoreFramePositionManager = true
+							MultiBarLeft.ignoreFramePositionManager = true
+							BD32CharacterData.multiBar.left.hasMoved = false
+							BD32CharacterData.multiBar.right.hasMoved = false
+							
+							petOrb:ClearAllPoints()
+							
+							petOrb:SetPoint("CENTER", healthOrb, "CENTER",-95,70)
+							
+							if miniOrb then
+								miniOrb:ClearAllPoints()
+								
+								miniOrb:SetPoint("CENTER", manaOrb, "CENTER",95,70)
+							end
+
+							BD32CharacterData.healthOrb.hasMoved = false
+							BD32CharacterData.manaOrb.hasMoved = false
+							BD32CharacterData.healthOrb.OrbXOffset = 0
+							BD32CharacterData.manaOrb.OrbXOffset = 0
+							BD32OrbScaleSlider:SetValue(100)
+							BD32ScaleSlider:SetValue(100)
+							BD32TargetOrbScaleSlider:SetValue(100)
+							BD32PetOrbScaleSlider:SetValue(100)
+							BD32HealthOrbScaleSlider:SetValue(100)
+							BD32ManaOrbScaleSlider:SetValue(100)
+							if miniOrb then 
+								BD32ComboOrbScaleSlider:SetValue(100)
+							end
+							end,
+							timeout = 0,
+							whileDead = true,
+							hideOnEscape = false,
+							preferredIndex = 3,
+						}
+						self.tooltip = BD_TOOLTIP_RESETBDWINDOWS
+					</OnLoad>
+					<OnEnter>
+						local r,g,b,a = self.text:GetTextColor()
+						self.text:SetTextColor(1,1,1,a)
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						local r,g,b,a = self.defaultTextColor.r,self.defaultTextColor.g,self.defaultTextColor.b,self.defaultTextColor.a
+						self.text:SetTextColor(r,g,b,a)
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnClick>
+						ColorPickerFrame:Hide()
+						StaticPopup_Show ("RESET_BD_WINDOWS")
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="Seperator1" inherits="UIPanelButtonTemplate">
+				<Size>
+					<AbsDimension x="438" y="3" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOP">
+						<Offset x="0" y="-55" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self:Disable()
+						self:Hide()
+					</OnLoad>
+				</Scripts>
+			</Button>
+			<Button name="Seperator2" inherits="UIPanelButtonTemplate">
+				<Size>
+					<AbsDimension x="438" y="3" />
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOM">
+						<Offset x="0" y="38" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self:Disable()
+						self:Hide()
+					</OnLoad>
+				</Scripts>
+			</Button>
+			<CheckButton name="TrackCombatCheckButton" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="220" y="-293" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrTCCheckButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Show Combat Orb" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if TrackCombatCheckButton:GetChecked() then
+							BD32CharacterData.combat.enabled = true
+							BD32UpdateOrbColor(healthOrb,BD32CharacterData.combat.orbColor,BD32CharacterData.combat.galaxy, BD32CharacterData.combat.font1,BD32CharacterData.combat.font2)
+						else
+							BD32CharacterData.combat.enabled = false
+							BD32UpdateOrbColor(healthOrb,BD32CharacterData.healthOrb.orbColor,BD32CharacterData.healthOrb.galaxy, BD32CharacterData.healthOrb.font1,BD32CharacterData.healthOrb.font2)
+						end
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_TRACKCOMBAT
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="ShowArtworkCheckButton" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="26" y="-369" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrArtworkCheckButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Show Artwork" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if ShowArtworkCheckButton:GetChecked() then
+							angelFrame:Show()
+							demonFrame:Show()
+							BD32CharacterData.artwork.show = true
+						else
+							angelFrame:Hide()
+							demonFrame:Hide()
+							BD32CharacterData.artwork.show = false
+						end
+						if BD32CharacterData.artwork.show and BD32CharacterData.barFrame.show then
+							barEndcapLeft:Show()
+							barEndcapRight:Show()
+						else
+							barEndcapLeft:Hide()
+							barEndcapRight:Hide()
+						end
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_SHOWARTWORK
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="ShowBlizzPlayerFrameCheckButton" inherits="UICheckButtonTemplate" checked="false">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="26" y="-445 " />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrPlayerFrameCheckButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Show Player Frame" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if ShowBlizzPlayerFrameCheckButton:GetChecked() then
+							BD32CharacterData.defaultPlayerFrame.show = true
+							handlePlayerFrame(BD32CharacterData.defaultPlayerFrame.show)
+						else
+							BD32CharacterData.defaultPlayerFrame.show = false
+							handlePlayerFrame(BD32CharacterData.defaultPlayerFrame.show)
+						end
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_SHOWBLIZZPLAYERFRAME
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="LockBDWindowsCheckButton" inherits="UICheckButtonTemplate" checked="false">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="220" y="-597" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrLockBDWindowsCheckButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Lock frames" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if self:GetChecked() then
+							BD32CharacterData.barFrame.locked = true
+						else
+							BD32CharacterData.barFrame.locked = false
+						end
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_LOCKBDWINDOWS
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="showBDTargetOrbValue" inherits="UICheckButtonTemplate" checked="false">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="26" y="-559" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrBDTargetOrbValue" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Target Orb Value" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if showBDTargetOrbValue:GetChecked() then
+							targetOrb.font3:Show()
+							targetOrb.font4:Show()
+							BD32CharacterData.targetOrb.showValue = true
+							checkTargetFontPlacement()
+						else
+							targetOrb.font3:Hide()
+							targetOrb.font4:Hide()
+							BD32CharacterData.targetOrb.showValue = false
+							checkTargetFontPlacement()
+						end
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_SHOWBDTARGETORBVALUE
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="showBDTargetOrbPercentage" inherits="UICheckButtonTemplate" checked="false">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="26" y="-597" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrBDTargetOrbPercentage" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Target Orb Percent" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if showBDTargetOrbPercentage:GetChecked() then							
+							targetOrb.font1:Show()
+							targetOrb.font2:Show()
+							BD32CharacterData.targetOrb.showPercentage = true
+							checkTargetFontPlacement()
+						else
+							targetOrb.font1:Hide()
+							targetOrb.font2:Hide()
+							BD32CharacterData.targetOrb.showPercentage = false
+							checkTargetFontPlacement()
+						end
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_SHOWBDTARGETORBPERCENTAGE
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="ShowBDTargetOrb" inherits="UICheckButtonTemplate" checked="false">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="26" y="-521" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrShowBDTargetOrb" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Show Target Orb" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if self:GetChecked() then
+							targetOrb:SetScript("OnUpdate",BDOupdateTargetValues)							
+							BD32CharacterData.targetOrb.enabled = true
+							RegisterStateDriver(targetOrb, "visibility", "[exists] show; hide")
+						else
+							targetOrb:SetScript("OnUpdate",nil)
+							targetOrb:Hide()
+							BD32CharacterData.targetOrb.enabled = false
+							UnregisterStateDriver(targetOrb, "visibility")
+						end
+						ReloadUI()
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_SHOWBDTARGETORB
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="ShowOrbEliteFrame" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="26" y="-531" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrShowOrbEliteFrame" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Show Rare/Elite" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if self:GetChecked() then								
+							BD32CharacterData.targetOrb.eliteFrame = true
+							checkBDTargetOrb()
+						else
+							BD32CharacterData.targetOrb.eliteFrame = false
+							checkBDTargetOrb()
+						end
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_SHOWORBELITEFRAME
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="ShowTargetFrame" inherits="UICheckButtonTemplate" checked="false">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="26" y="-483" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrShowTargetFrame" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Show Target Frame" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if self:GetChecked() then
+							BD32CharacterData.targetOrb.showBlizzTargetFrame = true
+							handleTargetFrame(BD32CharacterData.targetOrb.showBlizzTargetFrame, true)
+						else
+							BD32CharacterData.targetOrb.showBlizzTargetFrame = false
+							handleTargetFrame(BD32CharacterData.targetOrb.showBlizzTargetFrame, true)
+						end
+						ReloadUI()
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_SHOWTARGETFRAME
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="AnimateOrbValuesCheckButton" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="26" y="-293" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrAnimateOrbCheckButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Smooth Animate" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if AnimateOrbValuesCheckButton:GetChecked() then
+							BD32CharacterData.smoothing = true
+						else
+							BD32CharacterData.smoothing = false
+						end
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_ANIMATEORBVALUES
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="UseBarImageCheckButton" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="26" y="-407" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrBarImageCheckButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Show Actiobar Art" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if UseBarImageCheckButton:GetChecked() then
+							BD32CharacterData.barFrame.show = true					
+							handleActionBars()
+						else
+							UnregisterStateDriver(bar1Frame, "visibility")
+							UnregisterStateDriver(bar2Frame, "visibility")
+							UnregisterStateDriver(bar3Frame, "visibility")
+							BD32CharacterData.barFrame.show = false
+							bar1Frame:Hide()
+							bar2Frame:Hide()
+							bar3Frame:Hide()
+						end
+						if BD32CharacterData.artwork.show and BD32CharacterData.barFrame.show then
+							barEndcapLeft:Show()
+							barEndcapRight:Show()
+						else
+							barEndcapLeft:Hide()
+							barEndcapRight:Hide()
+						end
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_USEBARIMAGE
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="TruncatedValuesCheckButton" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="26" y="-331" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrTruncatedCheckButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Format Values" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if TruncatedValuesCheckButton:GetChecked() then
+							BD32CharacterData.values.formatted = true
+						else
+							BD32CharacterData.values.formatted = false
+						end
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_TRUNCATEDVALUES
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="UsePetOrbCheckButton" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="220" y="-331" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrUsePetOrbCheckButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Show Pet Orb" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if UsePetOrbCheckButton:GetChecked() then
+							RegisterUnitWatch(petOrb)
+							local BD32localizedDisplayName, BD32className, BD32classNumber = UnitClass("player")
+							local form = GetShapeshiftFormID()
+							Spec = GetSpecializationInfo(GetSpecialization())
+
+							BD32CharacterData.petOrb.enabled = true
+						else
+							UnregisterUnitWatch(petOrb)
+							petOrb:Hide()
+							BD32CharacterData.petOrb.enabled = false
+						end
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_USEPETORB
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="ShowPetOrbValuesCheckButton" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="220" y="-407" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrPetOrbValuesCheckButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Show Pet Values" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if ShowPetOrbValuesCheckButton:GetChecked() then
+							petOrb.font3:SetAlpha(1)
+							petOrb.font4:SetAlpha(1)
+							BD32CharacterData.petOrb.showValue = true
+							checkPetFontPlacement()
+						else
+							petOrb.font3:SetAlpha(0)
+							petOrb.font4:SetAlpha(0)							
+							BD32CharacterData.petOrb.showValue = false
+							checkPetFontPlacement()
+						end
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_SHOWPETORBVALUES
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="ShowPetOrbPercentagesCheckButton" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="220" y="-369" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrPetOrbPercentagesCheckButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Show Pet Percentage" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnClick>
+						if ShowPetOrbPercentagesCheckButton:GetChecked() then
+							petOrb.font1:Show()
+							petOrb.font2:Show()
+							BD32CharacterData.petOrb.showPercentage = true
+							checkPetFontPlacement()
+						else
+							petOrb.font1:Hide()
+							petOrb.font2:Hide()
+							BD32CharacterData.petOrb.showPercentage = false
+							checkPetFontPlacement()
+						end
+					</OnClick>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_SHOWPETORBPERCENTAGES
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="UsePowerTrackerCheckButton" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="220" y="-445" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrPowerTrackerCheckButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Show Power Tracker" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						if not miniOrb then
+							self:Hide()
+						end
+						self.tooltip = BD_TOOLTIP_USEPOWERTRACKER
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnClick>
+						if UsePowerTrackerCheckButton:GetChecked() then
+							local BD32localizedDisplayName, BD32className, BD32classNumber = UnitClass("player")
+							if miniOrb then
+								miniOrb:Show()
+								BD32CharacterData.miniOrb.enabled = true
+								if BD32className == "DRUID" then
+									RegisterStateDriver(miniOrb, "visibility", "[form:2/4]show;[form:1/3]hide;")
+								end								
+							end
+						else
+							if miniOrb then
+								if BD32className == "DRUID" then
+									UnregisterStateDriver(miniOrb, "visibility")
+								end
+								miniOrb:Hide()
+								BD32CharacterData.miniOrb.enabled = false
+							end
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="ShowComboPercentCheckButton" inherits="UICheckButtonTemplate" checked="false">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="220" y="-483" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrComboPercentCheckButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Combo Orb Percentage" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						if not miniOrb then
+							self:Hide()
+						end
+						self.tooltip = BD_TOOLTIP_SHOWCOMBOPERCENT
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnClick>
+						if ShowComboPercentCheckButton:GetChecked() then
+							if miniOrb then miniOrb.font1:Show() end
+							BD32CharacterData.miniOrb.showPercentage = true
+							checkComboFontPlacement()
+						else
+							if miniOrb then miniOrb.font1:Hide() end
+							BD32CharacterData.miniOrb.showPercentage = false
+							checkComboFontPlacement()
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="ShowComboValuesCheckButton" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="220" y="-521" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrComboValuesCheckButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Combo Orb Values" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						if not miniOrb then
+							self:Hide()
+						end
+						self.tooltip = BD_TOOLTIP_SHOWCOMBOVALUES
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnClick>
+						if ShowComboValuesCheckButton:GetChecked() then
+							if miniOrb then miniOrb.font2:Show() end
+							BD32CharacterData.miniOrb.showValue = true
+							checkComboFontPlacement()
+						else
+							if miniOrb then miniOrb.font2:Hide() end
+							BD32CharacterData.miniOrb.showValue = false
+							checkComboFontPlacement()
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SwapComboValuesCheckButton" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="220" y="-559" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrSwapValuesCheckButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Swap Combo Orb Values" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						if not miniOrb then
+							self:Hide()
+						end
+						self.tooltip = BD_TOOLTIP_SWAPCOMBOVALUES
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnClick>
+						if SwapComboValuesCheckButton:GetChecked() then							
+							BD32CharacterData.miniOrb.swapOrb = true						
+						else
+							BD32CharacterData.miniOrb.swapOrb = false
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<Slider name="BD32ScaleSlider" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="260" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="5" y="195" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						getglobal(self:GetName().."Text"):SetText("Bar Scale")
+						getglobal(self:GetName().."High"):SetText("150")
+						getglobal(self:GetName().."Low"):SetText("50")
+						self:SetMinMaxValues(50,150)
+						self:SetValueStep(1)
+						HealthBarXOffset = 0
+						ManaBarXOffset = 0
+						self.tooltip = BD_TOOLTIP_SCALESLIDER
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnValueChanged>
+						BD32SetGlobalScale(self:GetValue())
+						if not BD32CharacterData.healthOrb.hasMoved then
+							HealthBarXOffset = (self:GetValue()-95)*2
+							healthOrb:ClearAllPoints()
+							healthOrb:SetPoint("BOTTOM",nil,"BOTTOM",-250 - ((self:GetValue()-95)*2) + HealthOrbXOffset,0)
+							BD32CharacterData.healthOrb.OrbXOffset = ((self:GetValue()-95)*2) - OrbXOffset
+						end	
+						if not BD32CharacterData.manaOrb.hasMoved then
+							ManaBarXOffset = (self:GetValue()-95)*2
+							manaOrb:ClearAllPoints()						
+							manaOrb:SetPoint("BOTTOM",nil,"BOTTOM",250 + ((self:GetValue()-95)*2) - ManaOrbXOffset,0)
+							BD32CharacterData.manaOrb.OrbXOffset = ((self:GetValue()-95)*2) - OrbXOffset
+						end
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="BD32OrbScaleSlider" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="260" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="5" y="160" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						getglobal(self:GetName().."Text"):SetText("Orb Scale")
+						getglobal(self:GetName().."High"):SetText("150")
+						getglobal(self:GetName().."Low"):SetText("50")
+						self:SetMinMaxValues(50,150)
+						self:SetValueStep(1)
+						OrbXOffset = 0
+						self.tooltip = BD_TOOLTIP_ORBSCALESLIDER
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnValueChanged>
+						BD32SetGlobalOrbScale(self:GetValue())
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="BD32HealthOrbScaleSlider" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="260" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="5" y="125" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						getglobal(self:GetName().."Text"):SetText("Orb Scale")
+						getglobal(self:GetName().."High"):SetText("150")
+						getglobal(self:GetName().."Low"):SetText("50")
+						self:SetMinMaxValues(50,150)
+						self:SetValueStep(1)
+						HealthOrbXOffset = 0
+						self.tooltip = BD_TOOLTIP_HEALTHORBSCALESLIDER
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnValueChanged>
+						BD32SetGlobalHealthOrbScale(self:GetValue())
+						if not BD32CharacterData.healthOrb.hasMoved then
+							HealthOrbXOffset = (self:GetValue()-95)*2
+							healthOrb:ClearAllPoints()
+							healthOrb:SetPoint("BOTTOM",nil,"BOTTOM",-250 + ((self:GetValue()-95)*2) - HealthBarXOffset,0)
+						end
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="BD32ManaOrbScaleSlider" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="260" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="5" y="90" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						getglobal(self:GetName().."Text"):SetText("Orb Scale")
+						getglobal(self:GetName().."High"):SetText("150")
+						getglobal(self:GetName().."Low"):SetText("50")
+						self:SetMinMaxValues(50,150)
+						self:SetValueStep(1)
+						ManaOrbXOffset = 0
+						self.tooltip = BD_TOOLTIP_MANAORBSCALESLIDER
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnValueChanged>
+						BD32SetGlobalManaOrbScale(self:GetValue())
+						if not BD32CharacterData.manaOrb.hasMoved then
+							ManaOrbXOffset = (self:GetValue()-95)*2
+							manaOrb:ClearAllPoints()						
+							manaOrb:SetPoint("BOTTOM",nil,"BOTTOM",250 - ((self:GetValue()-95)*2) + ManaBarXOffset,0)
+						end
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="BD32TargetOrbScaleSlider" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="260" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="5" y="55" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						getglobal(self:GetName().."Text"):SetText("Target Orb Scale")
+						getglobal(self:GetName().."High"):SetText("150")
+						getglobal(self:GetName().."Low"):SetText("50")
+						self:SetMinMaxValues(50,150)
+						self:SetValueStep(1)
+						TargetOrbXOffset = 0
+						self.tooltip = BD_TOOLTIP_TARGETORBSCALESLIDER
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnValueChanged>
+						BD32SetTargetOrbScale(self:GetValue())
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="BD32PetOrbScaleSlider" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="260" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="5" y="20" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						getglobal(self:GetName().."Text"):SetText("Pet Orb Scale")
+						getglobal(self:GetName().."High"):SetText("150")
+						getglobal(self:GetName().."Low"):SetText("50")
+						self:SetMinMaxValues(50,150)
+						self:SetValueStep(1)
+						PetOrbXOffset = 0
+						self.tooltip = BD_TOOLTIP_PETORBSCALESLIDER
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnValueChanged>
+						BD32SetPetOrbScale(self:GetValue())
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="BD32ComboOrbScaleSlider" inherits="OptionsSliderTemplate" minValue="0" maxValue="0">
+				<Size>
+					<AbsDimension x="260" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="5" y="-15" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						getglobal(self:GetName().."Text"):SetText("Combo Orb Scale")
+						getglobal(self:GetName().."High"):SetText("150")
+						getglobal(self:GetName().."Low"):SetText("50")
+						self:SetMinMaxValues(50,150)
+						self:SetValueStep(1)
+						ComboOrbXOffset = 0
+						if not miniOrb then
+							self:Hide()
+						end
+						self.tooltip = BD_TOOLTIP_COMBOORBSCALESLIDER
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnValueChanged>
+						BD32SetComboOrbScale(self:GetValue())
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self:RegisterForDrag("LeftButton")
+				self:SetClampedToScreen(true)
+			</OnLoad>
+			<OnDragStart>
+				self:StartMoving()
+			</OnDragStart>
+			<OnDragStop>
+				self:StopMovingOrSizing()
+			</OnDragStop>
+			<OnHide>
+				BD32GUI.configFrame:Hide()
+			</OnHide>
+		</Scripts>
+	</Frame>
+	<Frame parentKey="configFrame" name="BD32ConfigFrame" parent="BD32GUI" frameStrata="HIGH">
+		<Size>
+			<AbsDimension x="457" y="480" />
+		</Size>
+		<Anchors>
+			<Anchor point="RIGHT">
+				<Offset x="450" y="0" />
+			</Anchor>
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="5" right="6" top="6" bottom="5" />
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32" />
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32" />
+			</EdgeSize>
+		</Backdrop>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString name="OrbTextureLabel" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="       Swirl Texture" justifyV="TOP">
+					<Size>
+						<AbsDimension x="181" y="39" />
+					</Size>
+					<Anchors>
+						<Anchor point="CENTER">
+							<Offset x="-20" y="-173" />
+						</Anchor>
+					</Anchors>
+					<FontHeight>
+						<AbsValue val="15" />
+					</FontHeight>
+					<Color r="1" g="1" b="1" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString name="FillTextureLabel" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Fill Texture" justifyV="TOP">
+					<Size>
+						<AbsDimension x="190" y="39" />
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT">
+							<Offset x="-20" y="-173" />
+						</Anchor>
+					</Anchors>
+					<FontHeight>
+						<AbsValue val="15" />
+					</FontHeight>
+					<Color r="1" g="1" b="1" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString name="FontChoiceLabel" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Orb Font" justifyV="TOP">
+					<Size>
+						<AbsDimension x="190" y="39" />
+					</Size>
+					<Anchors>
+						<Anchor point="RIGHT">
+							<Offset x="5" y="-173" />
+						</Anchor>
+					</Anchors>
+					<FontHeight>
+						<AbsValue val="15" />
+					</FontHeight>
+					<Color r="1" g="1" b="1" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString parentKey="text" inherits="BossEmoteNormalHuge" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="" justifyV="TOP">
+					<Size>
+						<AbsDimension x="181" y="39" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset x="20" y="-16" />
+						</Anchor>
+					</Anchors>
+					<FontHeight>
+						<AbsValue val="26" />
+					</FontHeight>
+					<Color r="1" g="1" b="1" />
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<CheckButton name="BD32OrbPercentageCheckBox" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="-58" y="-135" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrOrbPercentageCheckBox" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Show Percentage" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_ORBPERCENTAGE
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnClick>
+						checkXMLOrbFontPlacement()
+					</OnClick>
+					<OnClick>
+						checkXMLOrbFontPlacement()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="BD32OrbValueCheckBox" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="-197" y="-135" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrOrbValueCheckBox" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Show Value" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnShow />
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_ORBVALUE
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnClick>
+						checkXMLOrbFontPlacement()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="BD32OrbAbsorbCheckBox" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="100" y="-135" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer>
+						<FontString name="fontStrBD32OrbAbsorbCheckBox" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Show Absorb" justifyV="TOP">
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="29" y="0" />
+								</Anchor>
+							</Anchors>
+							<FontHeight>
+								<AbsValue val="12" />
+							</FontHeight>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnShow />
+					<OnLoad>
+						self.tooltip = BD_TOOLTIP_ORBABSORB
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText(self.tooltip)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnClick>
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<Frame name="xmlOrbDisplayFrame2" toplevel="true">
+				<Size x="200" y="200" />
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="0" y="10" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						FillXMLTemplate(self)
+					</OnLoad>
+				</Scripts>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				BD32ConfigFrame:Hide()
+				BD32ConfigFrame:SetClampedToScreen(true)
+			</OnLoad>
+		</Scripts>
+	</Frame>
+	<Frame parentKey="OptionsButtonPanel" parent="BD32ConfigFrame">
+		<Size>
+			<AbsDimension x="457" y="268" />
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER">
+				<Offset x="-435" y="101" />
+			</Anchor>
+		</Anchors>
+		<Frames>
+			<Frame name="ButtonListFrame" parent="BD32ConfigFrame">
+				<Size>
+					<AbsDimension x="451" y="56" />
+				</Size>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset x="0" y="165" />
+					</Anchor>
+				</Anchors>
+				<Frames>
+					<Button name="FillButton" inherits="UIPanelButtonTemplate">
+						<Size>
+							<AbsDimension x="95" y="23" />
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset x="39" y="-5" />
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer>
+								<FontString name="fontStrFillButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Fill" justifyV="TOP">
+									<Anchors>
+										<Anchor point="CENTER">
+											<Offset x="0" y="-1" />
+										</Anchor>
+									</Anchors>
+									<FontHeight>
+										<AbsValue val="12" />
+									</FontHeight>
+									<Color r="1" g="1" b="0" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnLoad>
+								FillButton:RegisterForClicks("LeftButtonUp")
+								FillButton.defaultTextColor = {r=1, g=1, b=0, a=1}
+								self.tooltip = BD_TOOLTIP_FILLBUTTON
+							</OnLoad>
+							<OnEnter>
+								local r,g,b,a = FillButton.text:GetTextColor()
+								FillButton.text:SetTextColor(1,1,1,a)
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+								GameTooltip:SetText(self.tooltip)
+							</OnEnter>
+							<OnLeave>
+								local r,g,b,a = FillButton.defaultTextColor.r,FillButton.defaultTextColor.g,FillButton.defaultTextColor.b,FillButton.defaultTextColor.a
+								FillButton.text:SetTextColor(r,g,b,a)
+								GameTooltip:Hide()
+							</OnLeave>
+							<OnClick>
+								ColorPickerFrame:Hide()
+								BD32ColorPicker("Filling")
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button name="SwirlButton" inherits="UIPanelButtonTemplate">
+						<Size>
+							<AbsDimension x="80" y="23" />
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset x="144" y="-5" />
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer>
+								<FontString name="fontStrSwirlButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Swirl" justifyV="TOP">
+									<Anchors>
+										<Anchor point="CENTER">
+											<Offset x="0" y="-1" />
+										</Anchor>
+									</Anchors>
+									<FontHeight>
+										<AbsValue val="10" />
+									</FontHeight>
+									<Color r="1" g="1" b="0" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnLoad>
+								SwirlButton:RegisterForClicks("LeftButtonUp")
+								SwirlButton.defaultTextColor = {r=1, g=1, b=0, a=1}
+								self.tooltip = BD_TOOLTIP_SWIRLBUTTON
+							</OnLoad>
+							<OnEnter>
+								local r,g,b,a = SwirlButton.text:GetTextColor()
+								SwirlButton.text:SetTextColor(1,1,1,a)
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+								GameTooltip:SetText(self.tooltip)
+							</OnEnter>
+							<OnLeave>
+								local r,g,b,a = SwirlButton.defaultTextColor.r,SwirlButton.defaultTextColor.g,SwirlButton.defaultTextColor.b,SwirlButton.defaultTextColor.a
+								SwirlButton.text:SetTextColor(r,g,b,a)
+								GameTooltip:Hide()
+							</OnLeave>
+							<OnClick>
+								ColorPickerFrame:Hide()
+								BD32ColorPicker("Swirl")
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button name="PercentageButton" inherits="UIPanelButtonTemplate">
+						<Size>
+							<AbsDimension x="100" y="23" />
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset x="234" y="-5" />
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer>
+								<FontString name="fontStrPercentageButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Percentage" justifyV="TOP">
+									<Anchors>
+										<Anchor point="CENTER">
+											<Offset x="0" y="0" />
+										</Anchor>
+									</Anchors>
+									<FontHeight>
+										<AbsValue val="10" />
+									</FontHeight>
+									<Color r="1" g="1" b="0" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnLoad>
+								PercentageButton:RegisterForClicks("LeftButtonUp")
+								PercentageButton.defaultTextColor = {r=1, g=1, b=0, a=1}
+								self.tooltip = BD_TOOLTIP_PERCENTAGEBUTTON
+							</OnLoad>
+							<OnEnter>
+								local r,g,b,a = PercentageButton.text:GetTextColor()
+								PercentageButton.text:SetTextColor(1,1,1,a)
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+								GameTooltip:SetText(self.tooltip)
+							</OnEnter>
+							<OnLeave>
+								local r,g,b,a = PercentageButton.defaultTextColor.r,PercentageButton.defaultTextColor.g,PercentageButton.defaultTextColor.b,PercentageButton.defaultTextColor.a
+								PercentageButton.text:SetTextColor(r,g,b,a)
+								GameTooltip:Hide()
+							</OnLeave>
+							<OnClick>
+								ColorPickerFrame:Hide()
+								BD32ColorPicker("Font1")
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button name="ValueButton" inherits="UIPanelButtonTemplate">
+						<Size>
+							<AbsDimension x="75" y="23" />
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset x="345" y="-5" />
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer>
+								<FontString name="fontStrValueButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Value" justifyV="TOP">
+									<Anchors>
+										<Anchor point="CENTER">
+											<Offset x="0" y="-1" />
+										</Anchor>
+									</Anchors>
+									<FontHeight>
+										<AbsValue val="12" />
+									</FontHeight>
+									<Color r="1" g="1" b="0" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnLoad>
+								ValueButton:RegisterForClicks("LeftButtonUp")
+								ValueButton.defaultTextColor = {r=1, g=1, b=0, a=1}
+								self.tooltip = BD_TOOLTIP_VALUEBUTTON
+							</OnLoad>
+							<OnEnter>
+								local r,g,b,a = ValueButton.text:GetTextColor()
+								ValueButton.text:SetTextColor(1,1,1,a)
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+								GameTooltip:SetText(self.tooltip)
+							</OnEnter>
+							<OnLeave>
+								local r,g,b,a = ValueButton.defaultTextColor.r,ValueButton.defaultTextColor.g,ValueButton.defaultTextColor.b,ValueButton.defaultTextColor.a
+								ValueButton.text:SetTextColor(r,g,b,a)
+								GameTooltip:Hide()
+							</OnLeave>
+							<OnClick>
+								ColorPickerFrame:Hide()
+								BD32ColorPicker("Font2")
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button name="CommitButton" inherits="GameMenuButtonTemplate" parent="BD32ConfigFrame">
+						<Size>
+							<AbsDimension x="133" y="23" />
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOM">
+								<Offset x="0" y="11" />
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer>
+								<FontString name="fontStrCommitButton" parentKey="text" inherits="BossEmoteNormalHuge" setAllPoints="true" font="Interface\addons\BeardleysDiabloOrbs\fonts\diablo-light.ttf" text="Apply changes" justifyV="TOP">
+									<Anchors>
+										<Anchor point="CENTER">
+											<Offset x="0" y="-1" />
+										</Anchor>
+									</Anchors>
+									<FontHeight>
+										<AbsValue val="12" />
+									</FontHeight>
+									<Color r="1" g="1" b="0" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnLoad>
+								CommitButton:RegisterForClicks("LeftButtonUp")
+								CommitButton.defaultTextColor = {r=1, g=1, b=0, a=1}
+							</OnLoad>
+							<OnEnter>
+								local r,g,b,a = CommitButton.text:GetTextColor()
+								CommitButton.text:SetTextColor(1,1,1,a)
+							</OnEnter>
+							<OnLeave>
+								local r,g,b,a = CommitButton.defaultTextColor.r,CommitButton.defaultTextColor.g,CommitButton.defaultTextColor.b,CommitButton.defaultTextColor.a
+								CommitButton.text:SetTextColor(r,g,b,a)
+							</OnLeave>
+							<OnClick>
+								BD32ApplyChanges()
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button name="HealthOrbOptionsDropDown" inherits="Lib_UIDropDownMenuTemplate" hidden="true" parent="BD32ConfigFrame">
+						<Size x="200" y="45" />
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset x="0" y="-15" />
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								CommitButton.activeElement = BD32CharacterData.healthOrb
+								local fillOptions = {
+								BD_DEFAULT,
+								BD_COMBAT
+								}
+
+								function HealthOrbOptionsDropDown:OnClick(value)
+									ColorPickerFrame:Hide()
+									Lib_UIDropDownMenu_SetSelectedID(HealthOrbOptionsDropDown,self:GetID())
+									local buttonText = Lib_UIDropDownMenu_GetText(HealthOrbOptionsDropDown)
+									if buttonText == BD_COMBAT then
+										CommitButton.activeElement = BD32CharacterData.combat
+										UpdateXMLColors(CommitButton.activeElement.orbColor,CommitButton.activeElement.galaxy,CommitButton.activeElement.font1,CommitButton.activeElement.font2)
+									elseif buttonText == BD_DEFAULT then
+										CommitButton.activeElement = BD32CharacterData.healthOrb
+										UpdateXMLColors(CommitButton.activeElement.orbColor,CommitButton.activeElement.galaxy,CommitButton.activeElement.font1,CommitButton.activeElement.font2)
+									end
+								end
+
+								local function initMen(self, level)
+									local stuff = Lib_UIDropDownMenu_CreateInfo()
+									for k,v in pairs(fillOptions) do
+									stuff = {}
+									stuff.text = v
+									stuff.value = v
+									stuff.func = HealthOrbOptionsDropDown.OnClick
+									Lib_UIDropDownMenu_AddButton(stuff, level)
+								end
+								end
+								Lib_UIDropDownMenu_Initialize(HealthOrbOptionsDropDown, initMen)
+								Lib_UIDropDownMenu_SetSelectedID(HealthOrbOptionsDropDown, 1)
+								Lib_UIDropDownMenu_JustifyText(HealthOrbOptionsDropDown, "LEFT")
+								self.tooltip = BD_TOOLTIP_HEALTHORBOPTIONS
+							</OnLoad>
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT",-52,0)
+								GameTooltip:SetText(self.tooltip)
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide()
+							</OnLeave>
+							<OnShow>
+								local buttonText = Lib_UIDropDownMenu_GetText(HealthOrbOptionsDropDown)
+								if buttonText == BD_COMBAT then
+									CommitButton.activeElement = BD32CharacterData.combat
+								elseif buttonText == BD_DEFAULT then
+									CommitButton.activeElement = BD32CharacterData.healthOrb
+								end
+								UpdateXMLColors(CommitButton.activeElement.orbColor,CommitButton.activeElement.galaxy,CommitButton.activeElement.font1,CommitButton.activeElement.font2)
+							</OnShow>
+						</Scripts>
+					</Button>
+					<Button name="ManaOrbOptionsDropDown" inherits="Lib_UIDropDownMenuTemplate" hidden="true" parent="BD32ConfigFrame">
+						<Size x="200" y="45" />
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset x="0" y="-15" />
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								BD32localizedDisplayName, BD32className, BD32classNumber = UnitClass("player")
+								CommitButton.activeElement = BD32CharacterData.manaOrb
+								local fillOptions2 = {
+								BD_DEFAULT,
+								}
+								if BD32className == "DRUID" then
+									fillOptions2 = {
+									BD_DEFAULT,
+									BD_BEAR,
+									BD_CAT,
+									BD_MOONKIN,
+									}
+								end
+								function ManaOrbOptionsDropDown:OnClick(value)
+									ColorPickerFrame:Hide()
+									Lib_UIDropDownMenu_SetSelectedID(ManaOrbOptionsDropDown,self:GetID())
+									local buttonText = Lib_UIDropDownMenu_GetText(ManaOrbOptionsDropDown)
+									if buttonText == BD_BEAR then
+										CommitButton.activeElement = BD32CharacterData.druidColors.bear
+										UpdateXMLColors(CommitButton.activeElement.orbColor,CommitButton.activeElement.galaxy,CommitButton.activeElement.font1,CommitButton.activeElement.font2)
+									elseif buttonText == BD_CAT then
+										CommitButton.activeElement = BD32CharacterData.druidColors.cat
+										UpdateXMLColors(CommitButton.activeElement.orbColor,CommitButton.activeElement.galaxy,CommitButton.activeElement.font1,CommitButton.activeElement.font2)
+									elseif buttonText == BD_MOONKIN then
+										CommitButton.activeElement = BD32CharacterData.druidColors.moonkin
+										UpdateXMLColors(CommitButton.activeElement.orbColor,CommitButton.activeElement.galaxy,CommitButton.activeElement.font1,CommitButton.activeElement.font2)
+									elseif buttonText == BD_DEFAULT then
+										CommitButton.activeElement = BD32CharacterData.manaOrb
+										UpdateXMLColors(CommitButton.activeElement.orbColor,CommitButton.activeElement.galaxy,CommitButton.activeElement.font1,CommitButton.activeElement.font2)
+									end
+								end
+
+								local function initMen(self, level)
+								local stuff = Lib_UIDropDownMenu_CreateInfo()
+								for k,v in pairs(fillOptions2) do
+								stuff = {}
+								stuff.text = v
+								stuff.value = v
+								stuff.func = ManaOrbOptionsDropDown.OnClick
+								Lib_UIDropDownMenu_AddButton(stuff, level)
+								end
+								end
+								Lib_UIDropDownMenu_Initialize(ManaOrbOptionsDropDown, initMen)
+								Lib_UIDropDownMenu_SetSelectedID(ManaOrbOptionsDropDown, 1)
+								Lib_UIDropDownMenu_JustifyText(ManaOrbOptionsDropDown, "LEFT")
+								self.tooltip = BD_TOOLTIP_MANAORBOPTIONS
+							</OnLoad>
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT",-52,0)
+								GameTooltip:SetText(self.tooltip)
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide()
+							</OnLeave>
+							<OnShow>
+								local buttonText = Lib_UIDropDownMenu_GetText(ManaOrbOptionsDropDown)
+								if buttonText == BD_BEAR then
+								CommitButton.activeElement = BD32CharacterData.druidColors.bear
+								elseif buttonText == BD_CAT then
+								CommitButton.activeElement = BD32CharacterData.druidColors.cat
+								elseif buttonText == BD_MOONKIN then
+								CommitButton.activeElement = BD32CharacterData.druidColors.moonkin
+								elseif buttonText == BD_DEFAULT then
+								CommitButton.activeElement = BD32CharacterData.manaOrb
+								end
+								UpdateXMLColors(CommitButton.activeElement.orbColor,CommitButton.activeElement.galaxy,CommitButton.activeElement.font1,CommitButton.activeElement.font2)
+							</OnShow>
+						</Scripts>
+					</Button>
+					<Button name="FillTexturesDropDown" inherits="Lib_UIDropDownMenuTemplate" parent="BD32ConfigFrame">
+						<Size x="200" y="45" />
+						<Anchors>
+							<Anchor point="BOTTOM">
+								<Offset x="-125" y="33" />
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								function FillTexturesDropDown:OnClick(value)
+									Lib_UIDropDownMenu_SetSelectedID(FillTexturesDropDown,self:GetID())
+									TryNewTextures(BD32FillTextureChoices[self:GetID() - 1],nil)
+								end
+
+								local textureNameTable = {
+								[0] = "Moon",
+								[1] = "Mist",
+								[2] = "Liquid Metal",
+								[3] = "Dragon Skin",
+								[4] = "Iris",
+								[5] = "Fractals",
+								[6] = "Warped",
+								[7] = "Earth",
+								[8] = "Golfball",
+								[9] = "Universe",
+								[10] = "Jupiter",
+								[11] = "Spot Network",
+								[12] = "Comet",
+								[13] = "Swirl",
+								[14] = "Marble",
+								[15] = "Bubbles",
+								[16] = "Nub Ball",
+								[17] = "Canonball",
+								[18] = "Bowling",
+								[19] = "Pluto",
+								[20] = "Spheres",
+								}
+
+								local function fillMenu(self, level)
+									local num = table.getn(textureNameTable)
+									for i=0,num,1 do
+										local val = textureNameTable[i]
+										stuff = {}
+										stuff.text = val
+										stuff.value = val
+										stuff.func = FillTexturesDropDown.OnClick
+										Lib_UIDropDownMenu_AddButton(stuff, level)
+									end
+								end
+								Lib_UIDropDownMenu_Initialize(FillTexturesDropDown, fillMenu)
+								Lib_UIDropDownMenu_SetSelectedID(FillTexturesDropDown, 1)
+								Lib_UIDropDownMenu_JustifyText(FillTexturesDropDown, "LEFT")
+								self.tooltip = BD_TOOLTIP_FILLTEXTURES
+							</OnLoad>
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT",-52,0)
+								GameTooltip:SetText(self.tooltip)
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide()
+							</OnLeave>
+							<OnShow />
+						</Scripts>
+					</Button>
+					<Button name="orbFontDropDown" inherits="Lib_UIDropDownMenuTemplate" parent="BD32ConfigFrame">
+						<Size x="200" y="45" />
+						<Anchors>
+							<Anchor point="BOTTOM">
+								<Offset x="150" y="33" />
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								function orbFontDropDown:OnClick(value)
+									Lib_UIDropDownMenu_SetSelectedID(orbFontDropDown,self:GetID())
+									TryNewFonts(self:GetID())
+								end
+								local textureNameTable = {
+								[0] = "Standard",
+								[1] = "Diablo Light",
+								[2] = "Diablo Heavy",
+								[3] = "Pixel",
+								[4] = "Digital",
+								[5] = "Diamonds",
+								[6] = "Crash-a-like",
+								[7] = "Graffiti",
+								[8] = "Carybe",
+								[9] = "Austinhill",			
+								}
+
+								local function orbFontMenu(self, level)
+									local num = table.getn(textureNameTable)
+									for i=0,num,1 do
+										local vall = textureNameTable[i]
+										stuff = {}
+										stuff.text = vall
+										stuff.value = vall
+										stuff.func = orbFontDropDown.OnClick
+										Lib_UIDropDownMenu_AddButton(stuff, level)
+									end
+								end
+								Lib_UIDropDownMenu_Initialize(orbFontDropDown, orbFontMenu)
+								Lib_UIDropDownMenu_SetSelectedID(orbFontDropDown, 1)
+								Lib_UIDropDownMenu_JustifyText(orbFontDropDown, "LEFT")
+								self.tooltip = BD_TOOLTIP_ORBFONT
+							</OnLoad>
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT",-52,0)
+								GameTooltip:SetText(self.tooltip)
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide()
+							</OnLeave>
+						</Scripts>
+					</Button>
+					<Button name="RotationTexturesDropDown" inherits="Lib_UIDropDownMenuTemplate" parent="BD32ConfigFrame">
+						<Size x="200" y="45" />
+						<Anchors>
+							<Anchor point="BOTTOM">
+								<Offset x="12" y="33" />
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								function RotationTexturesDropDown:OnClick(value)
+									Lib_UIDropDownMenu_SetSelectedID(RotationTexturesDropDown,self:GetID())
+									TryNewTextures(xmlOrbDisplayFrame2.orb.filling:GetTexture(),BD32RotationTextureChoices[self:GetID() - 1])
+								end
+
+								local textureNameTable = {
+								[0] = "Galaxy",
+								[1] = "Bubbles",
+								[2] = "Eye Glow",
+								[3] = "Windmills",
+								[4] = "Polygons",
+								[5] = "Swirl",
+								[6] = "Camilla",
+								}
+
+								local function rotationMenu(self, level)
+									local num = table.getn(textureNameTable)
+									for i=0,num,1 do
+										local val = textureNameTable[i]
+										stuff = {}
+										stuff.text = val
+										stuff.value = val
+										stuff.func = RotationTexturesDropDown.OnClick
+										Lib_UIDropDownMenu_AddButton(stuff, level)
+									end
+								end
+								Lib_UIDropDownMenu_Initialize(RotationTexturesDropDown, rotationMenu)
+								Lib_UIDropDownMenu_SetSelectedID(RotationTexturesDropDown, 1)
+								Lib_UIDropDownMenu_JustifyText(RotationTexturesDropDown, "LEFT")
+								self.tooltip = BD_TOOLTIP_ROTATIONTEXTURES
+							</OnLoad>
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT",-52,0)
+								GameTooltip:SetText(self.tooltip)
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide()
+							</OnLeave>
+							<OnShow />
+						</Scripts>
+					</Button>
+					<Button name="BD32ConfigFrameCloseButton" inherits="UIPanelCloseButton" parent="BD32ConfigFrame" text="">			
+						<Size>
+							<AbsDimension x="40" y="35" />
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset x="418" y="-2" />
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								BD32ConfigFrame:Hide()
+								ManaOrbOptionsDropDown:Hide()
+								HealthOrbOptionsDropDown:Hide()
+								ColorPickerFrame:Hide()					
+							</OnClick>
+						</Scripts>
+					</Button>
+				</Frames>
+			</Frame>
+		</Frames>
+	</Frame>
+</Ui>

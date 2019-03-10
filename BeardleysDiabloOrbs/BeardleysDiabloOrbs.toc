@@ -1,0 +1,18 @@
+## Title: Beardley's Diablo Orbs
+## Version: 2.145
+## Author: Kulturnilpferd
+## Interface: 70300
+## SavedVariablesPerCharacter: BD32CharacterData
+## SavedVariables: BD32MiniMapButtonPosition
+## Notes: Diablo Orbs UI for WoW
+## Notes-deDE: Diablo Orbs UI für WoW
+## Notes-frFR: Diablo Orbs UI pour WoW
+localizations\enEN.lua
+localizations\deDE.lua
+localizations\frFR.lua
+localizations\esES.lua
+localizations\ptBR.lua
+localizations\koKR.lua
+localizations\ruRU.lua
+embeds.xml
+BeardleysDiabloOrbs.xml
